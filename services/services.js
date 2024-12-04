@@ -51,12 +51,12 @@ export const getOrders = async (fromDate, tillDate, accessToken) => {
     
   };
 
-  export const getReports = async (fromDate, tillDate, accessToken) => {
+  export const getReports = async (fromDate, tillDate, accessToken, reportType) => {
     try {
       const reports = await axios.get('https://sellingpartnerapi-eu.amazon.com/reports/2021-06-30/reports',
         {
           params: {
-            'reportTypes': 'GET_V2_SETTLEMENT_REPORT_DATA_FLAT_FILE_V2',
+            'reportTypes': `${reportType}`,
             'MarketplaceIds': process.env.MARKET_PLACE_ID,
             'createdSince': fromDate,
             'createdUntil': tillDate
