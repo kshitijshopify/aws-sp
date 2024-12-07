@@ -6,92 +6,91 @@ import qs from 'qs';
 const __dirname = path.resolve();
 
 export const getToken = async () => {
-    try {
-      const token = await axios.post('https://api.amazon.com/auth/o2/token',
-        qs.stringify({
-          'client_id': process.env.CLIENT_ID,
-          'client_secret': process.env.CLIENT_SECRET,
-          'grant_type': 'refresh_token',
-          'refresh_token': process.env.REFRESH_TOKEN
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
+  try {
+    const token = await axios.post('https://api.amazon.com/auth/o2/token',
+      qs.stringify({
+        'client_id': process.env.CLIENT_ID,
+        'client_secret': process.env.CLIENT_SECRET,
+        'grant_type': 'refresh_token',
+        'refresh_token': process.env.REFRESH_TOKEN
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
+      }
     );
     return token.data;
-      
-    } catch (error) {
-      throw error;
-    }
+  } catch (error) {
+    throw error;
   }
+}
 
 export const getOrders = async (fromDate, tillDate, accessToken) => {
-    try {
-      const orders = await axios.get('https://sellingpartnerapi-eu.amazon.com/orders/v0/orders',
-        {
-          params: {
-            'MarketplaceIds': process.env.MARKET_PLACE_ID,
-            'CreatedAfter': fromDate,
-            'CreatedBefore': tillDate
-  
-          },
-          headers: {
-            'x-amz-access-token': accessToken
-          }
+  try {
+    const orders = await axios.get('https://sellingpartnerapi-eu.amazon.com/orders/v0/orders',
+      {
+        params: {
+          'MarketplaceIds': process.env.MARKET_PLACE_ID,
+          'CreatedAfter': fromDate,
+          'CreatedBefore': tillDate
+
+        },
+        headers: {
+          'x-amz-access-token': accessToken
         }
+      }
     );
 
     return orders.data;
-      
-    } catch (error) {
-      throw error;
-    }
-    
-  };
 
-  export const getReports = async (fromDate, tillDate, accessToken, reportType) => {
-    try {
-      const reports = await axios.get('https://sellingpartnerapi-eu.amazon.com/reports/2021-06-30/reports',
-        {
-          params: {
-            'reportTypes': `${reportType}`,
-            'MarketplaceIds': process.env.MARKET_PLACE_ID,
-            'createdSince': fromDate,
-            'createdUntil': tillDate
-  
-          },
-          headers: {
-            'x-amz-access-token': accessToken
-          }
+  } catch (error) {
+    throw error;
+  }
+
+};
+
+export const getReports = async (fromDate, tillDate, accessToken, reportType) => {
+  try {
+    const reports = await axios.get('https://sellingpartnerapi-eu.amazon.com/reports/2021-06-30/reports',
+      {
+        params: {
+          'reportTypes': `${reportType}`,
+          'MarketplaceIds': process.env.MARKET_PLACE_ID,
+          'createdSince': fromDate,
+          'createdUntil': tillDate
+
+        },
+        headers: {
+          'x-amz-access-token': accessToken
         }
+      }
     );
     return reports.data.reports;
-      
-    } catch (error) {
-      throw error;
-    }
-  };
 
-  export const getReportUrl = async (documentId, accessToken) => {
-    try {
-      const reports = await axios.get(`https://sellingpartnerapi-eu.amazon.com/reports/2021-06-30/documents/${documentId}`,
-        {
-          headers: {
-            'x-amz-access-token': accessToken
-          }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getReportUrl = async (documentId, accessToken) => {
+  try {
+    const reports = await axios.get(`https://sellingpartnerapi-eu.amazon.com/reports/2021-06-30/documents/${documentId}`,
+      {
+        headers: {
+          'x-amz-access-token': accessToken
         }
+      }
     );
     return reports.data;
-      
-    } catch (error) {
-      throw error;
-    }
-   
-  };
 
-  export const downloadReport = async (url) => {
+  } catch (error) {
+    throw error;
+  }
+
+};
+
+export const downloadReport = async (url) => {
   try {
     const savePath = path.join(__dirname, 'report.csv');
     const reportStream = await axios.get(`${url}`,

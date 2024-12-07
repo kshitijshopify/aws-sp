@@ -9,8 +9,8 @@ const port = process.env.PORT || 3000;
 import { downloadReports, generateToken, listOrderReports, listOrders, listReports } from './controller/appController.js';
 
 app.listen(port, () => {
-    console.log(`App is running at http://localhost:${port}`);
-  });
+  console.log(`App is running at http://localhost:${port}`);
+});
 
 
 app.post('/api/v1/token', generateToken);
